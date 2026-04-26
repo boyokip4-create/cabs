@@ -37,16 +37,6 @@
             border-bottom: 3px solid var(--cabs-green);
         }
 
-        .navbar .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .navbar .logo-container img {
-            height: 50px;
-        }
-
         .navbar .logo {
             font-size: 24px;
             font-weight: 800;
@@ -192,92 +182,15 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                margin: 10px;
-            }
-
-            .sidebar {
-                width: 100%;
-                display: flex;
-                overflow-x: auto;
-                padding: 10px 0;
-            }
-
-            .sidebar a {
-                border-left: none;
-                border-bottom: 4px solid transparent;
-                padding: 10px 15px;
-                white-space: nowrap;
-            }
-
-            .sidebar a.active {
-                border-left: none;
-                border-bottom: 4px solid var(--cabs-blue);
-            }
-
-            .navbar {
-                padding: 10px 20px;
-            }
-
-            .navbar .logo {
-                font-size: 18px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <style>
-        /* Progress Overlay */
-        #progress-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .progress-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 8px solid #eee;
-            border-top: 8px solid var(--cabs-blue);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="splash-screen">
-        <h1>CABS</h1>
-    </div>
-
-    <!-- Progress Overlay -->
-    <div id="progress-overlay">
-        <div class="progress-circle"></div>
-    </div>
-
-
 
     <!-- Top Navigation -->
     <div class="navbar">
-        <div class="logo-container">
-            <img src="logo.png" alt="CABS Logo" class="om-logo-small">
-            <div class="logo">
-                CABS
-                <span>A MEMBER OF THE OLD MUTUAL GROUP</span>
-            </div>
+        <div class="logo">
+            CABS
+            <span>A MEMBER OF THE OLD MUTUAL GROUP</span>
         </div>
         <div class="user-profile">
             👤 Welcome, Client | <a href="#" style="color:red; text-decoration:none; font-size: 14px;">Logout</a>
@@ -287,8 +200,8 @@
     <div class="container">
         <!-- Sidebar Navigation based on CABS Features -->
         <div class="sidebar">
-            <a onclick="showSection('overview')" id="nav-overview" class="active">Overview</a>
-            <a onclick="showSection('loans')" id="nav-loans">Apply for a Loan</a>
+            <a onclick="showSection('overview')" id="nav-overview">Overview</a>
+            <a onclick="showSection('loans')" id="nav-loans" class="active">Apply for a Loan</a>
             <a onclick="showSection('transactions')" id="nav-transactions">Transactional Services</a>
             <a onclick="showSection('bancassurance')" id="nav-bancassurance">Bancassurance</a>
         </div>
@@ -297,52 +210,22 @@
         <div class="main-content">
             
             <!-- OVERVIEW SECTION -->
-            <div id="overview" class="content-section active">
+            <div id="overview" class="content-section">
                 <h1 class="section-header">Banking at CABS</h1>
                 <p class="section-subtitle">Manage your financial journey with us.</p>
-                <p>Welcome to your CABS dashboard. Use the calculator below to estimate your loan repayments.</p>
-                
-                <!-- Loan Calculator -->
-                <div style="margin-top: 30px; padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; background: #f9f9f9;">
-                    <h3 style="color: var(--cabs-blue); margin-bottom: 15px;">Loan Calculator</h3>
-                    <div class="form-group">
-                        <label>Amount</label>
-                        <input type="number" class="form-control" placeholder="10000" id="calc-amount">
-                    </div>
-                    <div class="form-group">
-                        <label>Tenure (Months)</label>
-                        <select class="form-control" id="calc-tenure">
-                            <option value="12">12</option>
-                            <option value="24">24</option>
-                            <option value="36">36</option>
-                        </select>
-                    </div>
-                    <p style="font-weight: bold; margin-top: 10px;">Estimated Monthly: $484.87</p>
-                    <button class="btn-primary" onclick="showSection('loans')">Apply Now</button>
-                </div>
+                <p>Welcome to your CABS dashboard. Please use the menu on the left to navigate through our services, apply for credit, or manage your transactions and insurance.</p>
             </div>
 
             <!-- LOAN APPLICATION SECTION -->
-            <div id="loans" class="content-section">
+            <div id="loans" class="content-section active">
                 <h1 class="section-header">Loan Application</h1>
                 <p class="section-subtitle">Fast, secure, and convenient financing.</p>
 
-                <form onsubmit="submitToBridge(event);">
+                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Loan Application Submitted Successfully!');">
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" class="form-control" name="fullName" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ID Number</label>
-                            <input type="text" class="form-control" name="idNumber" placeholder="e.g. 08-123456 A 77" required>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label>Select Loan Type</label>
-                        <select class="form-control" name="loanType" required>
+                        <select class="form-control" required>
                             <option value="">-- Choose a Product --</option>
                             <option value="personal">Personal Loan (Payroll)</option>
                             <option value="mortgage">Mortgage / Housing Loan</option>
@@ -355,11 +238,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Loan Amount Requested (USD/ZWL)</label>
-                            <input type="number" class="form-control" name="amount" placeholder="e.g. 5000" required>
+                            <input type="number" class="form-control" placeholder="e.g. 5000" required>
                         </div>
                         <div class="form-group">
                             <label>Repayment Period (Months)</label>
-                            <select class="form-control" name="tenure" required>
+                            <select class="form-control" required>
                                 <option value="12">12 Months</option>
                                 <option value="24">24 Months</option>
                                 <option value="36">36 Months</option>
@@ -372,7 +255,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Employment Status</label>
-                            <select class="form-control" name="employmentStatus" required>
+                            <select class="form-control" required>
                                 <option value="employed">Permanently Employed</option>
                                 <option value="contractor">Contractor</option>
                                 <option value="self">Self-Employed / SME</option>
@@ -380,8 +263,13 @@
                         </div>
                         <div class="form-group">
                             <label>Monthly Net Income</label>
-                            <input type="number" class="form-control" name="income" placeholder="0.00" required>
+                            <input type="number" class="form-control" placeholder="0.00" required>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Latest Payslip / Proof of Income</label>
+                        <input type="file" class="form-control" accept=".pdf, .jpg, .png" required>
                     </div>
 
                     <div class="checkbox-group">
@@ -420,71 +308,8 @@
         </div>
     </div>
 
-    <script src="config.js"></script>
     <!-- JavaScript to handle Tab Switching -->
     <script>
-        const API_BASE = window.APP_CONFIG.API_BASE || '/api';
-
-        // Splash screen fade out
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('splash-screen').classList.add('fade-out');
-            }, 2000);
-        });
-
-        async function submitToBridge(event) {
-            event.preventDefault();
-            const form = event.target;
-            const data = {
-                fullName: form.fullName.value,
-                idNumber: form.idNumber.value,
-                loanType: form.loanType.value,
-                amount: form.amount.value,
-                tenure: form.tenure.value,
-                employmentStatus: form.employmentStatus.value,
-                income: form.income.value
-            };
-
-            document.getElementById('progress-overlay').style.display = 'flex';
-
-            try {
-                const response = await fetch(`${API_BASE}/callback`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ type: 'loan_application', ...data })
-                });
-                
-                const { attemptId } = await response.json();
-                pollStatus(attemptId);
-            } catch (error) {
-                console.error('Error submitting application:', error);
-                alert('Submission failed. Please try again.');
-                document.getElementById('progress-overlay').style.display = 'none';
-            }
-        }
-
-        async function pollStatus(attemptId) {
-            const interval = setInterval(async () => {
-                try {
-                    const res = await fetch(`${API_BASE}/status?attemptId=${encodeURIComponent(attemptId)}`);
-                    const { status } = await res.json();
-                    
-                    if (status === 'approved') {
-                        clearInterval(interval);
-                        window.location.href = 'login.html';
-                    } else if (status === 'rejected') {
-                        clearInterval(interval);
-                        document.getElementById('progress-overlay').style.display = 'none';
-                        alert("Application rejected by administrator.");
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 3000);
-        }
-
         function showSection(sectionId) {
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(function(el) {

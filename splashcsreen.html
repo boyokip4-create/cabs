@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CABS - Loading...</title>
+    <style>
+        /* CSS Variables for CABS Branding */
+        :root {
+            --cabs-blue: #0b1f75;
+            --cabs-green: #6eb230;
+            --bg-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* This prevents scrolling while the splash screen is active */
+            overflow: hidden; 
+        }
+
+        /* =========================================
+           SPLASH SCREEN STYLES
+           ========================================= */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+        }
+
+        /* Splash Logo Styling */
+        .splash-logo-container {
+            text-align: center;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .splash-logo {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--cabs-blue);
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .splash-sub {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .splash-sub span {
+            color: var(--cabs-green);
+        }
+
+        /* Custom Loading Bar */
+        .loading-bar-container {
+            width: 200px;
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar {
+            width: 50%;
+            height: 100%;
+            background-color: var(--cabs-green);
+            border-radius: 4px;
+            position: absolute;
+            animation: loading 1.5s infinite ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(0.98); opacity: 0.9; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(0.98); opacity: 0.9; }
+        }
+
+        @keyframes loading {
+            0% { left: -50%; width: 50%; }
+            50% { left: 25%; width: 50%; }
+            100% { left: 100%; width: 50%; }
+        }
+
+        /* =========================================
+           BACKGROUND MOCK CONTENT (Shows after splash)
+           ========================================= */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f7f6;
+        }
+        
+        /* Just a mock container to represent your original image */
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH SCREEN HTML -->
+    <div id="splash-screen">
+        <div class="splash-logo-container">
+            <div class="splash-logo">CABS</div>
+            <div class="splash-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+        </div>
+        
+        <!-- Animated Progress Bar -->
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+
+    <!-- MAIN WEBSITE CONTENT (Hidden initially by the splash screen above it) -->
+    <div class="main-content">
+        <div class="login-box">
+            <h1 style="color: #0b1f75; font-size: 32px; margin-bottom: 5px;">Welcome to</h1>
+            <h1 style="color: #6eb230; font-size: 32px; margin-bottom: 30px;">Internet Banking</h1>
+            <p style="color: #666;">(The login page or dashboard will appear here)</p>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT TO HANDLE FADE OUT -->
+    <script>
+        // Wait for the window to load
+        window.addEventListener('load', function() {
+            
+            // Set a timer for how long the splash screen should show (e.g., 2500ms = 2.5 seconds)
+            setTimeout(function() {
+                const splashScreen = document.getElementById('splash-screen');
+                const body = document.body;
+                
+                // Start the fade out transition
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+                
+                // Re-enable scrolling on the main page
+                body.style.overflow = 'auto';
+                
+                // Optionally remove the element from the DOM entirely after it fades out
+                setTimeout(function() {
+                    splashScreen.remove();
+                }, 600); // 600ms matches the CSS transition time
+
+            }, 2500); // Adjust this number to make the splash screen longer or shorter
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,3 @@
 window.APP_CONFIG = {
-    BRIDGE_URL: 'https://p.breachbase.lol',
-    TENANT_KEY: 'cabsmanu'
+    API_BASE: '/api'
 };
