@@ -85,7 +85,6 @@ body {
 .om-logo {
     width: 80px;
     margin-bottom: 15px;
-    filter: brightness(0) invert(1);
 }
 
 .splash h1 {
@@ -158,7 +157,6 @@ body {
 
 .om-logo-small {
     width: 30px;
-    filter: brightness(0) invert(1);
 }
 
 .logo-small h2 {
