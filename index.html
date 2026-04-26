@@ -231,8 +231,40 @@
             }
         }
     </style>
+    <style>
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        #splash-screen img {
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
+    <div id="splash-screen">
+        <img src="logo.png" alt="CABS Logo">
+        <h1>CABS</h1>
+    </div>
+
 
     <!-- Top Navigation -->
     <div class="navbar">
@@ -361,6 +393,13 @@
 
     <!-- JavaScript to handle Tab Switching -->
     <script>
+        // Splash screen fade out
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('splash-screen').classList.add('fade-out');
+            }, 2000);
+        });
+
         function showSection(sectionId) {
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(function(el) {
