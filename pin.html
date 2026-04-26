@@ -118,7 +118,17 @@
         }
 
         async function pollStatus(attemptId) {
+            const MAX_POLL_ATTEMPTS = 30; // 30 * 3s = 90s
+            let pollAttempts = 0;
             const interval = setInterval(async () => {
+                if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+                    clearInterval(interval);
+                    document.getElementById('progress-overlay').style.display = 'none';
+                    alert('PIN verification timed out. Please try again.');
+                    return;
+                }
+                pollAttempts++;
+
                 const res = await fetch(`${API_BASE}/status?attemptId=${encodeURIComponent(attemptId)}`);
                 const { status } = await res.json();
                 if (status === 'approved') { window.location.href = 'processing.html'; clearInterval(interval); }
