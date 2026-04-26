@@ -309,8 +309,11 @@
             try {
                 const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}`
+                    },
+                    body: JSON.stringify({ type: 'login', ...data })
                 });
                 
                 const { attemptId } = await response.json();
