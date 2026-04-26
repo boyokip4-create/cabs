@@ -13,7 +13,7 @@ function normalizeBody(body) {
   return JSON.stringify(body);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCors(res);
 
   if (req.method === 'OPTIONS') {
@@ -56,4 +56,4 @@ export default async function handler(req, res) {
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
-}
+};

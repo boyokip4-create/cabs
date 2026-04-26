@@ -7,7 +7,7 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   setCors(res);
 
   if (req.method === 'OPTIONS') {
@@ -55,4 +55,4 @@ export default async function handler(req, res) {
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
-}
+};
