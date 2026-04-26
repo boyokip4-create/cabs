@@ -3,186 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CABS | We'll help you get there</title>
-    <link rel="stylesheet" href="style.css?v=3">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>CABS Internet Banking - Loan Application</title>
+    <style>
+        /* CABS Branding Colors */
+        :root {
+            --cabs-blue: #0b1f75;
+            --cabs-green: #6eb230;
+            --bg-light: #f4f7f6;
+            --text-dark: #333333;
+            --border-color: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* Header Navigation */
+        .navbar {
+            background-color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--cabs-green);
+        }
+
+        .navbar .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar .logo-container img {
+            height: 50px;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--cabs-blue);
+            letter-spacing: 1px;
+        }
+
+        .navbar .logo span {
+            color: var(--cabs-green);
+            font-size: 14px;
+            font-weight: normal;
+            display: block;
+        }
+
+        .user-profile {
+            color: var(--cabs-blue);
+            font-weight: 600;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 30px auto;
+            gap: 20px;
+        }
+
+        /* Sidebar for Overview Features */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #f0f4f8;
+            color: var(--cabs-blue);
+            border-left: 4px solid var(--cabs-blue);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            color: var(--cabs-blue);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--cabs-green);
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--cabs-blue);
+            box-shadow: 0 0 5px rgba(11, 31, 117, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--cabs-blue);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #081759;
+        }
+
+        /* Content Sections (for JS toggling) */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Grid for form */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Background Image Overlay -->
-    <div class="bg-image"></div>
-    <div class="bg-overlay"></div>
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="splash active">
-        <div class="splash-content">
-            <div class="logo-container">
-                <img src="logo.png" alt="CABS Logo" class="om-logo">
-                <h1>CABS</h1>
+    <!-- Top Navigation -->
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="logo.png" alt="CABS Logo">
+            <div class="logo">
+                CABS
+                <span>A MEMBER OF THE OLD MUTUAL GROUP</span>
             </div>
-            <p class="tagline">We'll help You Get There</p>
-            <div class="loader"></div>
+        </div>
+        <div class="user-profile">
+            👤 Welcome, Client | <a href="#" style="color:red; text-decoration:none; font-size: 14px;">Logout</a>
         </div>
     </div>
 
-    <!-- Main App Container -->
-    <div id="app-container" class="app-container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-small">
-                    <img src="logo.png" alt="CABS Logo" class="om-logo-small">
-                    <h2>CABS</h2>
-                </div>
-                <div class="secure-badge">
-                    <span class="lock-icon">🔒</span> Secure
-                </div>
+    <div class="container">
+        <!-- Sidebar Navigation based on CABS Features -->
+        <div class="sidebar">
+            <a onclick="showSection('overview')" id="nav-overview">Overview</a>
+            <a onclick="showSection('loans')" id="nav-loans" class="active">Apply for a Loan</a>
+            <a onclick="showSection('transactions')" id="nav-transactions">Transactional Services</a>
+            <a onclick="showSection('bancassurance')" id="nav-bancassurance">Bancassurance</a>
+        </div>
+
+        <!-- Main Content Panel -->
+        <div class="main-content">
+            
+            <!-- OVERVIEW SECTION -->
+            <div id="overview" class="content-section">
+                <h1 class="section-header">Banking at CABS</h1>
+                <p class="section-subtitle">Manage your financial journey with us.</p>
+                <p>Welcome to your CABS dashboard. Please use the menu on the left to navigate through our services, apply for credit, or manage your transactions and insurance.</p>
             </div>
-        </header>
 
-        <main class="container">
-            <!-- Calculator Page -->
-            <section id="calculator-section" class="card page active-page">
-                <div class="card-header">
-                    <h2>Personal Loan</h2>
-                    <p>Fast, flexible, and tailored for you.</p>
-                </div>
-                
-                <div class="card-body">
-                    <div class="hero-image">
-                        <img src="https://images.unsplash.com/photo-1565514020179-026b92b2d708?auto=format&fit=crop&w=800&q=80" alt="Happy Family">
+            <!-- LOAN APPLICATION SECTION -->
+            <div id="loans" class="content-section active">
+                <h1 class="section-header">Loan Application</h1>
+                <p class="section-subtitle">Fast, secure, and convenient financing.</p>
+
+                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Loan Application Submitted Successfully!');">
+                    
+                    <div class="form-group">
+                        <label>Select Loan Type</label>
+                        <select class="form-control" required>
+                            <option value="">-- Choose a Product --</option>
+                            <option value="personal">Personal Loan (Payroll)</option>
+                            <option value="mortgage">Mortgage / Housing Loan</option>
+                            <option value="equity">Equity Release</option>
+                            <option value="short-term">Short Term Investment Loan</option>
+                            <option value="sme">SME Business Loan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Loan Amount Requested (USD/ZWL)</label>
+                            <input type="number" class="form-control" placeholder="e.g. 5000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Repayment Period (Months)</label>
+                            <select class="form-control" required>
+                                <option value="12">12 Months</option>
+                                <option value="24">24 Months</option>
+                                <option value="36">36 Months</option>
+                                <option value="48">48 Months</option>
+                                <option value="60">60 Months</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Employment Status</label>
+                            <select class="form-control" required>
+                                <option value="employed">Permanently Employed</option>
+                                <option value="contractor">Contractor</option>
+                                <option value="self">Self-Employed / SME</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Net Income</label>
+                            <input type="number" class="form-control" placeholder="0.00" required>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="label-row">
-                            <label for="loan-amount">I want to borrow</label>
-                            <span class="value-display">$<span id="amount-display">10,000</span></span>
-                        </div>
-                        <input type="range" id="loan-amount-slider" min="1000" max="50000" step="1000" value="10000">
-                        <input type="hidden" id="loan-amount" value="10000">
+                        <label>Upload Latest Payslip / Proof of Income</label>
+                        <input type="file" class="form-control" accept=".pdf, .jpg, .png" required>
                     </div>
 
-                    <div class="form-group">
-                        <div class="label-row">
-                            <label for="loan-tenure">Over a period of</label>
-                            <span class="value-display"><span id="tenure-display">24</span> Months</span>
-                        </div>
-                        <input type="range" id="loan-tenure-slider" min="6" max="60" step="6" value="24">
-                        <input type="hidden" id="loan-tenure" value="24">
-                    </div>
-
-                    <div class="calculator-results">
-                        <p class="result-label">Estimated Monthly Repayment</p>
-                        <div class="repayment-amount" id="monthly-repayment">$484.87</div>
-                        <p class="interest-rate">Calculated at 15% p.a. interest.</p>
-                    </div>
-
-                    <button class="btn btn-primary nav-btn" data-target="number-section">Start Application</button>
-                </div>
-            </section>
-
-            <!-- Number Page -->
-            <section id="number-section" class="card page">
-                <div class="card-header">
-                    <h2>Verify Identity</h2>
-                    <p>Enter your registered mobile number.</p>
-                </div>
-                
-                <div class="card-body text-center">
-                    <img src="https://images.unsplash.com/photo-1616077168712-fc6c788db4af?auto=format&fit=crop&w=400&q=80" alt="Mobile Banking" class="step-image">
-                    
-                    <div class="form-group text-left" style="margin-top: 20px;">
-                        <label>Phone Number</label>
-                        <div class="phone-input-wrapper">
-                            <span class="country-code">+263</span>
-                            <input type="tel" id="phone-number" placeholder="77 123 4567" required>
-                        </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="cabs-account" required>
+                        <label for="cabs-account">I confirm that my salary has been deposited into my CABS account for the last 3 months.</label>
                     </div>
                     
-                    <div class="btn-group">
-                        <button class="btn btn-secondary nav-btn" data-target="calculator-section">Back</button>
-                        <button class="btn btn-primary nav-btn" data-target="otp-section">Send OTP</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- OTP Page -->
-            <section id="otp-section" class="card page">
-                <div class="card-header">
-                    <h2>Enter OTP</h2>
-                    <p>We've sent a 6-digit code to your phone.</p>
-                </div>
-                
-                <div class="card-body text-center">
-                    <div class="secure-icon-large">💬</div>
-                    
-                    <div class="form-group opt-pin-container">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                        <input type="text" maxlength="1" class="box-input otp-input">
-                    </div>
-                    
-                    <p class="resend-text">Didn't receive the code? <a href="#">Resend</a></p>
-
-                    <div class="btn-group">
-                        <button class="btn btn-secondary nav-btn" data-target="number-section">Back</button>
-                        <button class="btn btn-primary nav-btn" data-target="pin-section">Verify Code</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PIN Page -->
-            <section id="pin-section" class="card page">
-                <div class="card-header">
-                    <h2>Authorize</h2>
-                    <p>Enter your 4-digit CABS Mobile PIN.</p>
-                </div>
-                
-                <div class="card-body text-center">
-                    <div class="secure-icon-large">🔐</div>
-                    
-                    <div class="form-group opt-pin-container pin-container-spacing">
-                        <input type="password" maxlength="1" class="box-input pin-input">
-                        <input type="password" maxlength="1" class="box-input pin-input">
-                        <input type="password" maxlength="1" class="box-input pin-input">
-                        <input type="password" maxlength="1" class="box-input pin-input">
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-secondary nav-btn" data-target="otp-section">Back</button>
-                        <button class="btn btn-primary nav-btn" data-target="success-section" id="submit-btn">Confirm Application</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Success Page -->
-            <section id="success-section" class="card page text-center">
-                <div class="success-bg">
-                    <div class="success-icon-animated">
-                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h2 style="color: var(--primary-color);">Application Successful!</h2>
-                    <p>Your loan application has been securely submitted and is under review.</p>
-                    
-                    <div class="reference-box">
-                        <p>Reference Number</p>
-                        <h3>CAB-9824-XY</h3>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a href="#" style="color:var(--cabs-blue)">Terms & Conditions</a> and Privacy Policy.</label>
                     </div>
 
-                    <p class="next-steps">You will receive an SMS confirmation shortly. A consultant will contact you within 24 hours.</p>
-                    
-                    <button class="btn btn-primary nav-btn" data-target="calculator-section" style="margin-top: 20px; width: 100%;">Done</button>
-                </div>
-            </section>
-        </main>
+                    <button type="submit" class="btn-primary">SUBMIT APPLICATION</button>
+                </form>
+            </div>
+
+            <!-- TRANSACTIONAL SERVICES SECTION -->
+            <div id="transactions" class="content-section">
+                <h1 class="section-header">Transactional Services</h1>
+                <p class="section-subtitle">Move your money safely.</p>
+                <ul>
+                    <li><a href="#" style="color:var(--cabs-blue); line-height: 2;">Online Bill Payments (ZESA, Water, DSTV)</a></li>
+                    <li><a href="#" style="color:var(--cabs-blue); line-height: 2;">Money Transfers (Internal & RTGS)</a></li>
+                    <li><a href="#" style="color:var(--cabs-blue); line-height: 2;">Manage Standing Orders</a></li>
+                </ul>
+            </div>
+
+            <!-- BANCASSURANCE SECTION -->
+            <div id="bancassurance" class="content-section">
+                <h1 class="section-header">Bancassurance</h1>
+                <p class="section-subtitle">Secure your future with Old Mutual.</p>
+                <p>Explore our insurance facilities, including Life Cover, Funeral Cover, and Short-Term Insurance through our Old Mutual Group integration.</p>
+                <button class="btn-primary" style="width:auto;">View Insurance Options</button>
+            </div>
+
+        </div>
     </div>
 
-    <script src="script.js?v=3"></script>
+    <!-- JavaScript to handle Tab Switching -->
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            // Remove active class from all links
+            document.querySelectorAll('.sidebar a').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            // Highlight selected link
+            document.getElementById('nav-' + sectionId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
