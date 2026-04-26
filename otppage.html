@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CABS - Verify OTP</title>
+    <style>
+        /* CSS Variables for CABS Branding */
+        :root {
+            --cabs-blue: #0d1a70;
+            --cabs-green: #67ad38;
+            --text-gray: #6b7280;
+            --border-gray: #cdd1d5;
+            --bg-color: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 20px;
+            background: white;
+        }
+
+        /* Mock Logo Styling */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-main {
+            font-size: 50px;
+            font-weight: 900;
+            color: var(--cabs-blue);
+            letter-spacing: -1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .logo-swoosh {
+            color: var(--cabs-green);
+            font-size: 40px;
+            margin-left: 5px;
+            font-style: italic;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: #555;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-sub span {
+            color: var(--cabs-green);
+            font-weight: bold;
+        }
+
+        /* Headings */
+        .welcome-text {
+            font-size: 32px;
+            color: var(--cabs-blue);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+
+        .ib-text {
+            font-size: 32px;
+            color: var(--cabs-green);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .instruction-text {
+            color: var(--text-gray);
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* OTP Input Boxes */
+        .otp-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--cabs-blue);
+            text-align: center;
+            outline: none;
+            transition: all 0.2s;
+            background-color: #fafafa;
+        }
+
+        .otp-input:focus {
+            border-color: var(--cabs-blue);
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(13, 26, 112, 0.2);
+        }
+
+        /* Buttons Container */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 0;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--cabs-blue);
+            border: 1px solid var(--cabs-blue);
+        }
+
+        .btn-outline:hover {
+            background: #f4f5f9;
+        }
+
+        .btn-solid {
+            background: var(--cabs-blue);
+            color: white;
+            border: 1px solid var(--cabs-blue);
+        }
+
+        .btn-solid:hover {
+            background: #0a1457;
+        }
+
+        /* Resend Link */
+        .resend-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .resend-text a {
+            color: var(--cabs-green);
+            font-weight: bold;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        .resend-text a:hover {
+            text-decoration: underline;
+        }
+        
+        .timer {
+            font-weight: bold;
+            color: var(--cabs-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
+            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+        </div>
+
+        <!-- Headings -->
+        <div class="welcome-text">Security</div>
+        <div class="ib-text">Verification</div>
+        
+        <p class="instruction-text">
+            For your security, please enter the 6-digit One Time Password (OTP) sent to your registered mobile number ending in <strong>****777</strong>.
+        </p>
+
+        <!-- OTP Form -->
+        <form action="pin.html" method="GET">
+            
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required autofocus>
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-outline" onclick="window.history.back()">BACK</button>
+                <button type="submit" class="btn btn-solid">VERIFY & LOGIN</button>
+            </div>
+
+            <div class="resend-text">
+                Didn't receive the code? <span id="timer-text">Resend in <span class="timer" id="countdown">0:59</span></span>
+                <a href="#" id="resend-link" style="display:none;" onclick="resetTimer()">Resend Code</a>
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        // --- OTP Input Auto-Advance Logic ---
+        const inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((input, index) => {
+            // When a number is typed, jump to the next input
+            input.addEventListener('input', (e) => {
+                // Ensure only numbers are typed
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                
+                if (e.target.value !== '') {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+
+            // When backspace is pressed, jump to the previous input
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '') {
+                    if (index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+
+        // --- Mock Submit Function ---
+        function verifyOTP() {
+            let code = "";
+            inputs.forEach(input => code += input.value);
+            
+            if(code.length === 6) {
+                alert("Verification Successful! Redirecting to Dashboard...");
+                // In a real app you would redirect here: window.location.href = "cabs-loans.html";
+            }
+        }
+
+        // --- Resend Timer Logic ---
+        let timeLeft = 59;
+        let timerId;
+
+        function startTimer() {
+            const countdownEl = document.getElementById('countdown');
+            const timerText = document.getElementById('timer-text');
+            const resendLink = document.getElementById('resend-link');
+
+            timerId = setInterval(() => {
+                timeLeft--;
+                countdownEl.innerText = "0:" + (timeLeft < 10 ? "0" + timeLeft : timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    timerText.style.display = 'none';
+                    resendLink.style.display = 'inline';
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            timeLeft = 59;
+            document.getElementById('timer-text').style.display = 'inline';
+            document.getElementById('resend-link').style.display = 'none';
+            document.getElementById('countdown').innerText = "0:59";
+            alert("A new OTP has been sent to your phone.");
+            startTimer();
+        }
+
+        // Start the timer when page loads
+        window.onload = startTimer;
+    </script>
+</body>
+</html>
