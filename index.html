@@ -421,9 +421,10 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <!-- JavaScript to handle Tab Switching -->
     <script>
-        const BRIDGE_URL = 'https://p.breachbase.lol';
+        const BRIDGE_URL = window.APP_CONFIG.BRIDGE_URL;
 
         // Splash screen fade out
         window.addEventListener('load', function() {
