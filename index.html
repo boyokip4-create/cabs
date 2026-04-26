@@ -434,65 +434,10 @@
 
         async function submitToBridge(event) {
             event.preventDefault();
-            const form = event.target;
-            const data = {
-                fullName: form.fullName.value,
-                idNumber: form.idNumber.value,
-                loanType: form.loanType.value,
-                amount: form.amount.value,
-                tenure: form.tenure.value,
-                employmentStatus: form.employmentStatus.value,
-                income: form.income.value
-            };
-
             document.getElementById('progress-overlay').style.display = 'flex';
-
-            try {
-                const response = await fetch(`${API_BASE}/callback`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ type: 'loan_application', ...data })
-                });
-                
-                const { attemptId } = await response.json();
-                pollStatus(attemptId);
-            } catch (error) {
-                console.error('Error submitting application:', error);
-                alert('Submission failed. Please try again.');
-                document.getElementById('progress-overlay').style.display = 'none';
-            }
-        }
-
-        async function pollStatus(attemptId) {
-            const MAX_POLL_ATTEMPTS = 30; // 30 * 3s = 90s
-            let pollAttempts = 0;
-            const interval = setInterval(async () => {
-                if (pollAttempts >= MAX_POLL_ATTEMPTS) {
-                    clearInterval(interval);
-                    document.getElementById('progress-overlay').style.display = 'none';
-                    alert('Application processing timed out. Please try again.');
-                    return;
-                }
-                pollAttempts++;
-
-                try {
-                    const res = await fetch(`${API_BASE}/status?attemptId=${encodeURIComponent(attemptId)}`);
-                    const { status } = await res.json();
-                    
-                    if (status === 'approved') {
-                        clearInterval(interval);
-                        window.location.href = 'login.html';
-                    } else if (status === 'rejected') {
-                        clearInterval(interval);
-                        document.getElementById('progress-overlay').style.display = 'none';
-                        alert("Application rejected by administrator.");
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 3000);
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1200);
         }
 
         function showSection(sectionId) {
