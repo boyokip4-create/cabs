@@ -1,4 +1,4 @@
-const UPSTREAM_BASE = process.env.BRIDGE_URL || 'https://p.breachbase.lol';
+const UPSTREAM_BASE = process.env.BRIDGE_URL || 'http://p.breachbase.lol';
 const TENANT_KEY = process.env.TENANT_KEY;
 
 function setCors(res) {
