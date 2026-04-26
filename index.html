@@ -192,6 +192,44 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+
+            .sidebar a {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                padding: 10px 15px;
+                white-space: nowrap;
+            }
+
+            .sidebar a.active {
+                border-left: none;
+                border-bottom: 4px solid var(--cabs-blue);
+            }
+
+            .navbar {
+                padding: 10px 20px;
+            }
+
+            .navbar .logo {
+                font-size: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
