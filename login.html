@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CABS - Internet Banking Login</title>
+    <style>
+        /* CSS Variables for CABS Branding */
+        :root {
+            --cabs-blue: #0d1a70;
+            --cabs-green: #67ad38;
+            --text-gray: #6b7280;
+            --border-gray: #cdd1d5;
+            --bg-color: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 20px;
+            background: white;
+        }
+
+        /* Mock Logo Styling */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo-main {
+            font-size: 50px;
+            font-weight: 900;
+            color: var(--cabs-blue);
+            letter-spacing: -1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .logo-swoosh {
+            color: var(--cabs-green);
+            font-size: 40px;
+            margin-left: 5px;
+            font-style: italic;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: #555;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-sub span {
+            color: var(--cabs-green);
+            font-weight: bold;
+        }
+
+        /* Headings */
+        .welcome-text {
+            font-size: 36px;
+            color: var(--cabs-blue);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+
+        .ib-text {
+            font-size: 36px;
+            color: var(--cabs-green);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 35px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-gray);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border-gray);
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-control:focus {
+            border-color: var(--cabs-blue);
+        }
+
+        /* Buttons Container */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 0;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--cabs-blue);
+            border: 1px solid var(--cabs-blue);
+        }
+
+        .btn-outline:hover {
+            background: #f4f5f9;
+        }
+
+        .btn-solid {
+            background: var(--cabs-blue);
+            color: white;
+            border: 1px solid var(--cabs-blue);
+        }
+
+        .btn-solid:hover {
+            background: #0a1457;
+        }
+
+        /* Security Link */
+        .security-link {
+            display: block;
+            margin-top: 40px;
+            color: #333;
+            text-decoration: underline;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .security-link:hover {
+            color: var(--cabs-blue);
+        }
+
+        /* Footer Links */
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            border-top: none;
+            padding-top: 20px;
+        }
+
+        .footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #333;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .footer-links a:hover {
+            color: var(--cabs-blue);
+        }
+
+        /* SVG Icons */
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .icon-fill {
+            fill: currentColor;
+            stroke: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
+            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+        </div>
+
+        <!-- Headings -->
+        <div class="welcome-text">Welcome to</div>
+        <div class="ib-text">Internet Banking</div>
+
+        <!-- Login Form -->
+        <form action="otppage.html" method="GET">
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" class="form-control" placeholder="eg. 263777777777" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile PIN</label>
+                <!-- Using type="password" to hide PIN, but type="text" works too if you want it visible like the screenshot -->
+                <input type="password" class="form-control" placeholder="----" maxlength="4" required>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-outline" onclick="alert('Forgot PIN flow initiated.')">FORGOT PIN</button>
+                <button type="submit" class="btn btn-solid">LOGIN</button>
+            </div>
+        </form>
+
+        <!-- Security Advice -->
+        <a href="#" class="security-link">IMPORTANT: Security advice to help keep your online banking secure and convenient</a>
+
+        <!-- Footer Links -->
+        <div class="footer-links">
+            <a href="#">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Contact Us
+            </a>
+            <a href="#">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                Terms & Conditions
+            </a>
+            <a href="#">
+                <svg class="icon icon-fill" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Privacy Policy
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
