@@ -234,7 +234,14 @@
 
         async function submitOtpToBridge(event) {
             event.preventDefault();
+            const inputs = document.querySelectorAll('.otp-input');
             const otp = Array.from(inputs).map(i => i.value).join('');
+            
+            if (otp.length !== 6) {
+                alert('Please enter a valid 6-digit OTP.');
+                return;
+            }
+
             document.getElementById('progress-overlay').style.display = 'flex';
 
             try {
