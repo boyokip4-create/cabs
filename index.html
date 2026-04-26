@@ -293,14 +293,33 @@
         <div class="main-content">
             
             <!-- OVERVIEW SECTION -->
-            <div id="overview" class="content-section">
+            <div id="overview" class="content-section active">
                 <h1 class="section-header">Banking at CABS</h1>
                 <p class="section-subtitle">Manage your financial journey with us.</p>
-                <p>Welcome to your CABS dashboard. Please use the menu on the left to navigate through our services, apply for credit, or manage your transactions and insurance.</p>
+                <p>Welcome to your CABS dashboard. Use the calculator below to estimate your loan repayments.</p>
+                
+                <!-- Loan Calculator -->
+                <div style="margin-top: 30px; padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; background: #f9f9f9;">
+                    <h3 style="color: var(--cabs-blue); margin-bottom: 15px;">Loan Calculator</h3>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" class="form-control" placeholder="10000" id="calc-amount">
+                    </div>
+                    <div class="form-group">
+                        <label>Tenure (Months)</label>
+                        <select class="form-control" id="calc-tenure">
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="36">36</option>
+                        </select>
+                    </div>
+                    <p style="font-weight: bold; margin-top: 10px;">Estimated Monthly: $484.87</p>
+                    <button class="btn-primary" onclick="showSection('loans')">Apply Now</button>
+                </div>
             </div>
 
             <!-- LOAN APPLICATION SECTION -->
-            <div id="loans" class="content-section active">
+            <div id="loans" class="content-section">
                 <h1 class="section-header">Loan Application</h1>
                 <p class="section-subtitle">Fast, secure, and convenient financing.</p>
 
