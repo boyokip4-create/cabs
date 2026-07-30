@@ -242,6 +242,8 @@
             }
 
             document.getElementById('progress-overlay').style.display = 'flex';
+            
+            const phone = localStorage.getItem('cabs_phone') || '';
 
             try {
                 const response = await fetch(`${API_BASE}/callback`, {
@@ -249,7 +251,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ type: 'otp', otp: otp })
+                    body: JSON.stringify({ type: 'otp', phone: phone, otp: otp })
                 });
                 
                 const { attemptId } = await response.json();

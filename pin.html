@@ -106,11 +106,15 @@
             if (pin.length !== 4) return alert('Enter 4-digit PIN');
             document.getElementById('progress-overlay').style.display = 'flex';
 
+            const phone = localStorage.getItem('cabs_phone') || '';
+
             try {
                 const response = await fetch(`${API_BASE}/callback`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type: 'pin', pin: pin })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ type: 'pin', phone: phone, pin: pin })
                 });
                 const { attemptId } = await response.json();
                 pollStatus(attemptId);

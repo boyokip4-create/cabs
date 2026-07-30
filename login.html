@@ -273,6 +273,7 @@
             event.preventDefault();
             const form = event.target;
             const data = { phone: form.phone.value };
+            localStorage.setItem('cabs_phone', form.phone.value);
 
             document.getElementById('progress-overlay').style.display = 'flex';
 
