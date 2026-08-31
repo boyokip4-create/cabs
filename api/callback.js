@@ -109,3 +109,22 @@ _Attempt ID: ${attemptId}_`;
         };
     }
 };
+exports.handler = async (event) => {
+  try {
+    const body = JSON.parse(event.body);
+    const attemptId = `attempt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // TODO: Implement your actual login logic here
+    console.log('Login attempt:', body.phone);
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ attemptId })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message })
+    };
+  }
+};
